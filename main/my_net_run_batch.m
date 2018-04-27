@@ -277,6 +277,22 @@ if ~isempty(prediction_layer_idxes)
     
     assert(isempty(child_group_idxes));
     
+%   CHANGES HERE
+    if(~isempty(extra_data_info.output_layers{1,1}))
+        tmpVar = extra_data_info.output_layers{1,1}.data_child_groups;
+	saveDir = work_info_batch.ref.train_opts.root_cache_dir;
+        savePathTmp = strcat(saveDir, '/denseDesc/');
+	if ~exist(savePathTmp)
+		mkdir(savePathTmp);
+	end
+        batchNumTmp = string(work_info_batch.ref.batch_idx-1);
+	denseDesc = tmpVar{1,1}.x; 
+        dlmwrite(char(strcat(savePathTmp,batchNumTmp,'.txt')),denseDesc);
+        %save(strcat(savePathTmp,batchNumTmp,'.mat'),'denseDesc');
+	dlmwrite(strcat(saveDir,"/denseDescShapes.txt"),size(denseDesc),'-append');
+    end
+%   CHANGES END
+
     prediction_info=work_info_batch.ref.prediction_info_groups{group_idx};
     keep_output_infos=extra_data_info.output_layers(group_info.prediction_layer_idxes);
 

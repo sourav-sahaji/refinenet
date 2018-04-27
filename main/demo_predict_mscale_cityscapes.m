@@ -15,8 +15,8 @@ run(fullfile(dir_matConvNet, 'vl_setupnn.m'));
 run_config=[];
 ds_config=[];
 
-run_config.use_gpu=true;
-% run_config.use_gpu=false;
+% run_config.use_gpu=true;
+run_config.use_gpu=false;
 run_config.gpu_idx=1;
 
 
@@ -24,9 +24,9 @@ run_config.gpu_idx=1;
 % settings for using trained model:
 
 ds_name_subfix='cityscapes';
-
+datasetName = 'd1'
 % result dir:
-result_name=['result_' datestr(now, 'YYYYmmDDHHMMSS') '_predict_custom_data'];
+result_name=[datasetName '_result_' datestr(now, 'YYYYmmDDHHMMSS') '_predict_custom_data'];
 result_dir=fullfile('../cache_data', ['test_examples_' ds_name_subfix], result_name);
 
 % using a trained model:
@@ -44,7 +44,7 @@ run_config.input_img_short_edge_max=1100; %cityscapes images are larger than oth
 
 
 % specify the folder that contains testing images:
-img_data_dir='../datasets/example_imgs_cityscapes';
+img_data_dir=['../datasets/' datasetName];
 
 % providing ground-truth mask folder for evaluation, or set to empty if not available
 % if the folder of ground-truth masks are provided (an example is shown below), 
@@ -71,9 +71,9 @@ gt_mask_dir=[];
 %-------------------------------------------------------------------------------------------------------------------------
 % settings for multi-scale prediction, you can consider 3 scales or 5 scales:
 
-prediction_scales=[0.4 0.6 0.8 1 1.2]; % 5 scales
+% prediction_scales=[0.4 0.6 0.8 1 1.2]; % 5 scales
 % prediction_scales=[0.6 0.8 1]; % 3 scales
-% prediction_scales=[0.8]; % or only use 1 scale
+prediction_scales=[0.8]; % or only use 1 scale
 %-------------------------------------------------------------------------------------------------------------------------
 
 
@@ -143,7 +143,7 @@ data_norm_info.image_mean=128;
 imdb.ref.data_norm_info=data_norm_info;
 
 [net_config, net_exp_info]=prepare_running_model(train_opts);
-
+net_config.ref.group_infos{3,1}.prediction_layer_idxes = [1;1];
 prediction_scales=run_config.prediction_scales;
 scale_num=length(prediction_scales);
 predict_result_dirs=cell(scale_num, 1);
