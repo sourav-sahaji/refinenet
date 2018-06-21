@@ -24,7 +24,7 @@ run_config.gpu_idx=1;
 % settings for using trained model:
 
 ds_name_subfix='cityscapes';
-datasetName = 'd1'
+datasetName = '2-s'
 % result dir:
 result_name=[datasetName '_result_' datestr(now, 'YYYYmmDDHHMMSS') '_predict_custom_data'];
 result_dir=fullfile('../cache_data', ['test_examples_' ds_name_subfix], result_name);
